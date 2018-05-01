@@ -4,7 +4,7 @@ function Set() {
     this.intersection = function (listA, listB) {
 
         var resultList = [];
-        if (listA !== null) {
+        if (listA !== null && listB !== null) {
             listA.forEach(function (itemA) {
                 if (listB !== null) {
                     listB.forEach(function (itemB) {
@@ -17,6 +17,8 @@ function Set() {
         } else {
             return null;
         }
+
+        resultList.sort();
         return resultList;
 
     };
@@ -25,11 +27,25 @@ function Set() {
     this.union = function (listA, listB) {
 
         var resultList = [];
-        resultList += this.intersection(listA, listB);
-        resultList += this.relativeComplement(listA, listB);
-        resultList += this.relativeComplement(listB, listB);
+        if (listA !== null && listB !== null) {
 
-        return resultList;
+
+            let diff = this.symmetricDifference(listA, listB);
+            let same = this.intersection(listA, listB);
+
+            diff.forEach(function (i) {
+                resultList.push(i);
+            });
+            same.forEach(function (x) {
+                resultList.push(x);
+            });
+
+            resultList.sort();
+
+
+            return resultList;
+        } else
+            return null;
     };
 
 
@@ -37,28 +53,47 @@ function Set() {
 
         var resultList = [];
 
-        //use "break;" to end a command in javascript;
+        if (listA !== null && listB !== null) {
 
-        return resultList;
+            for (var i = 0; i < listA.length; i++) {
+                let found = false;
+                for (var j = 0; j < listB.length; j++) {
+                    if (listA[i] === listB[j]) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    resultList.push(listA[i]);
+                }
+            }
+            resultList.sort();
+
+            return resultList;
+        } else
+            return null;
     };
 
 
     this.symmetricDifference = function (listA, listB) {
 
         var resultList = [];
-        var temp = this.intersection(listA, listB);
-        for(var itemA in listA) {
-            let found = false;
-            for (var x in temp) {
-                if (x === itemA) {
-                    found = true;
-                    break;
-                }
-                resultList.push(itemA);
-            }
-        }
-        console.log(resultList);
-        return resultList;
+        if (listA !== null && listB !== null) {
+            let relA = this.relativeComplement(listA, listB);
+            let relB = this.relativeComplement(listB, listA);
+
+            relA.forEach(function (item) {
+                resultList.push(item);
+            });
+            relB.forEach(function (itemB) {
+                resultList.push(itemB);
+            });
+
+            resultList.sort();
+
+            return resultList;
+        } else
+            return null;
     }
 
 
